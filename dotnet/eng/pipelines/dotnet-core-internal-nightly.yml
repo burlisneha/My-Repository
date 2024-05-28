@@ -1,0 +1,61 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - internal/release/nightly
+  paths:
+    include:
+    - manifest.json
+    - manifest.versions.json
+    - src/*
+pr: none
+
+parameters:
+- name: isTest
+  displayName: Is Test Pipeline Run
+  type: boolean
+  default: false
+
+resources:
+  repositories:
+  - repository: 1ESPipelineTemplates
+    type: git
+    name: 1ESPipelineTemplates/1ESPipelineTemplates
+    ref: refs/tags/release
+  - repository: InternalVersionsRepo
+    type: github
+    endpoint: dotnet
+    name: dotnet/dotnet-docker-internal
+
+variables:
+- template: /eng/pipelines/variables/internal-core.yml@self
+- name: officialBranches
+  # comma-delimited list of branch names
+  value: internal/release/nightly
+- name: ingestKustoImageInfo
+  value: false
+- name: publishReadme
+  value: false
+- ${{ if parameters.isTest }}:
+  - name: publishRepoPrefix
+    value: test/internal/private/
+- ${{ else }}:
+  - name: publishRepoPrefix
+    value: internal/private/
+
+extends:
+  template: v1/1ES.Official.PipelineTemplate.yml@1ESPipelineTemplates
+  parameters:
+    pool:
+      name: NetCore1ESPool-Internal
+      image: 1es-windows-2022
+      os: windows
+    sdl:
+      sourceRepositoriesToScan:
+        include:
+        - repository: InternalVersionsRepo
+    stages:
+    - template: /eng/pipelines/stages/build-test-publish-repo.yml@self
+      parameters:
+        internalProjectName: ${{ variables.internalProjectName }}
+        publicProjectName: ${{ variables.publicProjectName }}
