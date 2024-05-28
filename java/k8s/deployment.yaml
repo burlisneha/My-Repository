@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-deployment
+  labels:
+    app: my-java
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-java
+  template:
+    metadata:
+      labels:
+        app: my-java
+    spec:
+      containers:
+        - name: java-container
+          image: snehaburli/java:v2
+          ports:
+            - containerPort: 8123
+          resources:
+            limits:
+              cpu: "3Gi"
+              memory: "3Gi"
+            requests:
+              cpu: "3Gi"
+              memory: "3Gi" 
+          volumeMounts:
+            - name: data-volume
+              mountPath: /tmp
+      volumes:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: java-pvc
+
