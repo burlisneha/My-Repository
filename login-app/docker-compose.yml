@@ -1,0 +1,22 @@
+version: "3"
+services:
+  mongodb:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+  login-app:
+    build: ./
+    container_name: login-app
+    ports:
+      - "7500:7500"
+    depends_on:
+      - mongodb
+    
+volumes:
+  mongodb_data:
+    driver: local
+
+
