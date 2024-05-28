@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: reactjs-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: reactjs-storageclass
+  resources:
+    requests: 
+      storage: 5Gi
