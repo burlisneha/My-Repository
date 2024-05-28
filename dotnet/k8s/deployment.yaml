@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dotnet-deployment
+  labels:
+    app: my-dotnet
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-dotnet
+  template:
+    metadata:
+      labels:
+        app: my-dotnet
+    spec:
+      containers:
+        - name: dotnet-container
+          image: snehaburli/dotnet:v4
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: "3Gi"
+              memory: "3Gi"
+            requests:
+              cpu: "3Gi"
+              memory: "3Gi" 
+          volumeMounts:
+            - name: data-volume
+              mountPath: /tmp
+      volumes:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: dotnet-pvc
+
