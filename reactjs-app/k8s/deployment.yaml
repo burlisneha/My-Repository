@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reactjs-app-deployment
+  labels:
+    app: my-reactjs-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-reactjs-app
+  template:
+    metadata:
+      labels:
+        app: my-reactjs-app
+    spec:
+      containers:
+        - name: reactjs-app-container
+          image: snehaburli/portfolio-react:latest
+          ports:
+            - containerPort: 3000
+          resources:
+            limits:
+              cpu: "3Gi"
+              memory: "3Gi"
+            requests:
+              cpu: "3Gi"
+              memory: "3Gi" 
+          volumeMounts:
+            - name: data-volume
+              mountPath: /tmp
+      volumes:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: reactjs-app-pvc
+

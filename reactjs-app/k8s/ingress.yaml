@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: reactjs-app-ingress
+  annotations:
+    #nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    #nginx.ingress.kubernetes.io/use-regex: "true"
+    #nginx.ingress.kubernetes.io/rewrite-target: /$1
+    #nginx.ingress.kubernetes.io/affinity: cookie
+    #nginx.ingress.kubernetes.io/csrf-cookie-name: XSRF-TOKEN
+    #nginx.ingress.kubernetes.io/enable-csrf-protection: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: reactjs-app.info
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: reactjs-app-service
+            port:
+              number: 80
