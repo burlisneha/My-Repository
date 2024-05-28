@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-deployment
+  labels:
+    app: my-python
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-python
+  template:
+    metadata:
+      labels:
+        app: my-python
+    spec:
+      containers:
+        - name: python-container
+          image: snehaburli/python:v1
+          ports:
+            - containerPort: 8080 
+          resources:
+            limits:
+              cpu: "3Gi"
+              memory: "3Gi"
+            requests:
+              cpu: "3Gi"
+              memory: "3Gi" 
+          volumeMounts:
+            - name: data-volume
+              mountPath: /tmp
+      volumes:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: python-pvc
+
