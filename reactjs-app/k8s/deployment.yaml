@@ -21,11 +21,11 @@ spec:
             - containerPort: 3000
           resources:
             limits:
-              cpu: "3Gi"
-              memory: "3Gi"
+              cpu: "1"
+              memory: "1Gi"
             requests:
-              cpu: "3Gi"
-              memory: "3Gi" 
+              cpu: "500"
+              memory: "500Mi" 
           volumeMounts:
             - name: data-volume
               mountPath: /tmp
